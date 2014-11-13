@@ -39,7 +39,6 @@ RUN find "$APACHE_CONFDIR" -type f -exec sed -ri ' \
 ' '{}' ';'
 
 RUN rm -rf /var/www/html && mkdir /var/www/html
-VOLUME /var/www/html
 WORKDIR /var/www/html
 
 COPY docker-apache.conf /etc/apache2/sites-available/apache-default
