@@ -1,6 +1,7 @@
 FROM debian:wheezy
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y && \
+        apt-get install -y \
 		apache2 \
 		curl \
 		libapache2-mod-php5 \
@@ -13,6 +14,7 @@ RUN apt-get update && apt-get install -y \
 		git \
 		ca-certificates \
 	&& rm -rf /var/lib/apt/lists/*
+
 RUN a2enmod rewrite
 
 # install phpunit
@@ -21,6 +23,7 @@ RUN wget -O /usr/local/bin/phpunit -q https://phar.phpunit.de/phpunit.phar && ch
 # copy a few things from apache's init script that it requires to be setup
 ENV APACHE_CONFDIR /etc/apache2
 ENV APACHE_ENVVARS $APACHE_CONFDIR/envvars
+
 # and then a few more from $APACHE_CONFDIR/envvars itself
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
@@ -46,11 +49,12 @@ RUN a2dissite 000-default && a2ensite apache-default
 VOLUME /etc/apache2/sites-available
 
 # install Node.js
-RUN gpg --keyserver pgp.mit.edu --recv-keys 7937DFD2AB06298B2293C3187D33FF9D0246406D
+RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 7937DFD2AB06298B2293C3187D33FF9D0246406D 114F43EE0176B71C7BC219DD50A3051F888C628D
 
-ENV NODE_VERSION 0.10.33
-ENV NPM_VERSION 2.1.6
 
+ENV NODE_VERSION 0.12.0
+ENV NPM_VERSION 2.5.0
+	
 RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" \
 	&& curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
 	&& gpg --verify SHASUMS256.txt.asc \
