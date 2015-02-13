@@ -16,4 +16,9 @@ fi
 
 chown -R "$APACHE_RUN_USER:$APACHE_RUN_GROUP" .
 
+if [ -n "$NEWRELIC_LICENCE" ]; then
+export NR_INSTALL_KEY=$NEWRELIC_LICENCE
+newrelic-install install
+fi;
+
 exec "$@"

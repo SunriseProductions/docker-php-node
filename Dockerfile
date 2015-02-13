@@ -1,5 +1,10 @@
 FROM debian:wheezy
 
+
+RUN apt-get update && apt-get install -y wget ca-certificates
+RUN echo deb http://apt.newrelic.com/debian/ newrelic non-free >> /etc/apt/sources.list.d/newrelic.list
+RUN wget -O- https://download.newrelic.com/548C16BF.gpg | apt-key add -
+
 RUN apt-get update && apt-get upgrade -y && \
         apt-get install -y \
 		apache2 \
@@ -10,9 +15,8 @@ RUN apt-get update && apt-get upgrade -y && \
 		php5-mysql \
 		php5-xdebug \
 		rsync \
-		wget \
 		git \
-		ca-certificates \
+		newrelic-php5 \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN a2enmod rewrite
